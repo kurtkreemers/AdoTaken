@@ -1,0 +1,19 @@
+﻿<Window x:Class="Opgave3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="400" Width="525">
+    <Grid>
+        <Label Margin="0,50,200,0" Width="50" Height="25" VerticalAlignment="Top">Naam:</Label>
+        <TextBox Name="tbNaam" Width="100" Height="25" Margin="0,50,0,0" VerticalAlignment="Top"></TextBox>
+        <Label Margin="0,100,200,0" Width="50" Height="25" VerticalAlignment="Top">Adres:</Label>
+        <TextBox Name="tbAdres" Width="100" Height="25" Margin="0,100,0,0" VerticalAlignment="Top"></TextBox>
+        <Label Margin="0,150,200,0" Width="75" Height="25" VerticalAlignment="Top">Postcode:</Label>
+        <TextBox Name="tbPostcode" Width="100" Height="25" Margin="0,150,0,0" VerticalAlignment="Top"></TextBox>
+        <Label Margin="0,200,200,0" Width="50" Height="25" VerticalAlignment="Top">Plaats:</Label>
+        <TextBox Name="tbPlaats" Width="100" Height="25" Margin="0,200,0,0" VerticalAlignment="Top"></TextBox>
+        <Button  Name="Toevoegen" Margin="0,250,200,0" Width="75" Height="25" VerticalAlignment="Top" Click="Toevoegen_Click">Toevoegen</Button>
+        <Button Name="Korting" Width="100" Height="25" Margin="0,250,0,0" VerticalAlignment="Top" Click="Korting_Click">Eindejaarskorting</Button>
+        <Button Name="Vervangen" Width="120" Height="25" Margin="0,250,-240,0" VerticalAlignment="Top" >Vervang Leverancier</Button>
+        <Label Name="labelStatus" Width="500" Height="50" Margin="0,300,0,0"></Label>
+    </Grid>
+</Window>
