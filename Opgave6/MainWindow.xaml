@@ -1,0 +1,21 @@
+﻿<Window x:Class="Opgave6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Label Margin="0,50,200,0" Width="90" Height="25" VerticalAlignment="Top">Plantnummer:</Label>
+        <TextBox Name="tbSoortNummer" Height="25" Margin="223,50,175,0" VerticalAlignment="Top"/>
+        <Button  Name="buttonOpzoeken" Margin="379,51,43,0" Height="25" VerticalAlignment="Top" Click="buttonOpzoeken_Click" >Opzoeken</Button>
+        <Label Margin="0,100,200,0" Width="90" Height="25" VerticalAlignment="Top">Naam:</Label>
+        <Label Name="labelNaam" Margin="0,100,0,0" Width="90" Height="25" VerticalAlignment="Top"></Label>
+        <Label Margin="0,130,200,0" Width="90" Height="25" VerticalAlignment="Top">Soort:</Label>
+        <Label Name="labelSoort" Margin="0,130,0,0" Width="90" Height="25" VerticalAlignment="Top"></Label>
+        <Label Margin="0,160,200,0" Width="90" Height="25" VerticalAlignment="Top">Leverancier:</Label>
+        <Label Name="labelLeverancier" Margin="0,160,0,0" Width="90" Height="25" VerticalAlignment="Top"></Label>
+        <Label Margin="0,190,200,0" Width="90" Height="25" VerticalAlignment="Top">Kleur:</Label>
+        <Label Name="labelKleur" Margin="0,190,0,0" Width="90" Height="25" VerticalAlignment="Top"></Label>
+        <Label Margin="0,220,200,0" Width="90" Height="25" VerticalAlignment="Top">Kostprijs:</Label>
+        <Label Name="labelKostPrijs" Margin="0,220,0,0" Width="90" Height="25" VerticalAlignment="Top"></Label>
+        <Label Name="labelStatus" Width="500" Height="30" Margin="0,220,0,0"></Label>
+    </Grid>
+</Window>

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Leverancier.cs" />
+    <Compile Include="PlantenInfo.cs" />
     <Compile Include="TuinDBManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TuinManager.cs" />
