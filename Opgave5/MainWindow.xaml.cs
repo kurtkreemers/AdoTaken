@@ -14,7 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Gemeenschap;
 
-namespace Opgave2
+
+namespace Opgave5
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -26,23 +27,18 @@ namespace Opgave2
             InitializeComponent();
         }
 
-        private void Test_Click(object sender, RoutedEventArgs e)
+        private void buttonGemiddelde_Click(object sender, RoutedEventArgs e)
         {
+            var manager = new TuinManager();
             try
             {
-                var manager = new TuinDBManager();
-                using(var conTuin = manager.GetConnection())
-                {
-                    conTuin.Open();
-                    TestLabel.Content = "Tuincentrum geopend";
-                }
+                labelStatus.Content = manager.Gemiddelde1SoortBerekenen(tbSoort.Text).ToString("N");
             }
             catch (Exception ex)
             {
                 
-                TestLabel.Content = ex.Message;
+                labelStatus.Content = ex.Message;
             }
         }
-    
     }
 }

@@ -60,5 +60,20 @@ namespace Opgave3
                 labelStatus.Content = ex.Message;
             }
         }
+
+        private void Vervangen_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var manager = new TuinManager();
+                manager.VervangLeverancier(2, 3);
+                labelStatus.Content = "Leverancier 2 is verwijderd en vervangen door 3";
+            }
+            catch (Exception ex)
+            {
+                
+                labelStatus.Content = ex.Message;
+            }
+        }
     }
 }
