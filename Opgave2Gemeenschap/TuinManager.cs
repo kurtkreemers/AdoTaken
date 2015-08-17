@@ -31,7 +31,7 @@ namespace Gemeenschap
                     parAdres.Value = eenLeverancier.Adres;
                     comToevoegen.Parameters.Add(parAdres);
                     var parPostNr = comToevoegen.CreateParameter();
-                    parPostNr.ParameterName = "@Postcode";
+                    parPostNr.ParameterName = "@PostNr";
                     parPostNr.Value = eenLeverancier.PostNr;
                     comToevoegen.Parameters.Add(parPostNr);
                     var parWoonplaats = comToevoegen.CreateParameter();
@@ -39,8 +39,16 @@ namespace Gemeenschap
                     parWoonplaats.Value = eenLeverancier.Woonplaats;
                     comToevoegen.Parameters.Add(parWoonplaats);
 
-                    conTuin.Open();
-                    comToevoegen.ExecuteNonQuery();
+                    using (var comAutoNumber = conTuin.CreateCommand())
+                    {
+                        comAutoNumber.CommandType = CommandType.StoredProcedure;
+                        comAutoNumber.CommandText = "AutoNumberOphalen";
+
+                        conTuin.Open();
+                        comToevoegen.ExecuteNonQuery();
+                        eenLeverancier.LevNr = Convert.ToInt32(comAutoNumber.ExecuteScalar());
+                      
+                    }
                 }
             }
         }

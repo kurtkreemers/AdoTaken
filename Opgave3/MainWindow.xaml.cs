@@ -37,7 +37,8 @@ namespace Opgave3
                 deLeverancier.PostNr = tbPostcode.Text;
                 deLeverancier.Woonplaats = tbPlaats.Text;
                 manager.LeverancierToevoegen(deLeverancier);
-                labelStatus.Content = "nieuwe leverancier is toegevoegd";
+
+                labelStatus.Content = "Leverancier met nummer " + deLeverancier.LevNr +  " is toegevoegd";
 
             }
             catch (Exception ex)
