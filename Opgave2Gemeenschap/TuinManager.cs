@@ -205,6 +205,59 @@ namespace Gemeenschap
             }
 
         }
+        public List<Soort> GetSoorten()
+        {
+            List<Soort> soorten = new List<Soort>();
+            var manager = new TuinDBManager();
+            using(var conSoorten = manager.GetConnection())
+            {
+                using(var comSoortenZoeken = conSoorten.CreateCommand())
+                {
+                    comSoortenZoeken.CommandType = CommandType.Text;
+                    comSoortenZoeken.CommandText = "select SoortNr,Soort from Soorten order by Soort";
+                    conSoorten.Open();
+                    using(var rdrSoorten = comSoortenZoeken.ExecuteReader())
+                    {
+                        Int32 soortNummerPos = rdrSoorten.GetOrdinal("SoortNr");
+                        Int32 soortNaamPos = rdrSoorten.GetOrdinal("Soort");
+                        while(rdrSoorten.Read())
+                        {
+                        soorten.Add(new Soort(rdrSoorten.GetInt32(soortNummerPos),rdrSoorten.GetString(soortNaamPos)));
+                        }
+
+                    }
+                }
+            }
+            return soorten;
+        }
+        public List<String> GetPlanten(int soortNr)
+        {
+            List<String> planten = new List<String>();
+            var manager = new TuinDBManager();
+            using(var conPlanten = manager.GetConnection())
+            {
+                using(var comPlantenZoeken = conPlanten.CreateCommand())
+                {
+                    comPlantenZoeken.CommandType = CommandType.Text;
+                    comPlantenZoeken.CommandText = "select * from Planten where SoortNr like @input order by Naam";
+                    var parInput = comPlantenZoeken.CreateParameter();
+                    parInput.ParameterName = "@input";
+                    parInput.Value = soortNr;
+                    comPlantenZoeken.Parameters.Add(parInput);
+                    conPlanten.Open();
+                    using(var rdrPlanten = comPlantenZoeken.ExecuteReader())
+                    {
+                        Int32 plantNaamPos = rdrPlanten.GetOrdinal("Naam");
+
+                        while(rdrPlanten.Read())
+                        {
+                            planten.Add(rdrPlanten.GetString(plantNaamPos));
+                        }
+                    }
+                }
+            }
+            return planten;
+        }
 
     }
 }
