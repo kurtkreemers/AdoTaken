@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using System.Collections.ObjectModel;
 
 
 namespace Gemeenschap
@@ -230,16 +231,17 @@ namespace Gemeenschap
             }
             return soorten;
         }
-        public List<String> GetPlanten(int soortNr)
+        public List<Plant> GetPlanten(int soortNr)
         {
-            List<String> planten = new List<String>();
+            List<Plant> planten = new List<Plant>();
             var manager = new TuinDBManager();
             using(var conPlanten = manager.GetConnection())
             {
                 using(var comPlantenZoeken = conPlanten.CreateCommand())
                 {
                     comPlantenZoeken.CommandType = CommandType.Text;
-                    comPlantenZoeken.CommandText = "select * from Planten where SoortNr like @input order by Naam";
+                    comPlantenZoeken.CommandText = "select * from Planten where SoortNr=@input order by Naam";
+
                     var parInput = comPlantenZoeken.CreateParameter();
                     parInput.ParameterName = "@input";
                     parInput.Value = soortNr;
@@ -247,17 +249,117 @@ namespace Gemeenschap
                     conPlanten.Open();
                     using(var rdrPlanten = comPlantenZoeken.ExecuteReader())
                     {
-                        Int32 plantNaamPos = rdrPlanten.GetOrdinal("Naam");
+                        var plantNaamPos = rdrPlanten.GetOrdinal("Naam");
+                        var plantNrPos = rdrPlanten.GetOrdinal("plantnr");
+                        var levnrPos = rdrPlanten.GetOrdinal("levnr");
+                        var prijsPos = rdrPlanten.GetOrdinal("verkoopprijs");
+                        var kleurPos = rdrPlanten.GetOrdinal("kleur");
+                        var soortPos = rdrPlanten.GetOrdinal("soortnr");
 
                         while(rdrPlanten.Read())
                         {
-                            planten.Add(rdrPlanten.GetString(plantNaamPos));
+                            var eenPlant = new Plant(rdrPlanten.GetString(plantNaamPos),
+                                rdrPlanten.GetInt32(plantNrPos),rdrPlanten.GetInt32(levnrPos),
+                                rdrPlanten.GetDecimal(prijsPos),rdrPlanten.GetString(kleurPos));
+                            planten.Add(eenPlant);
                         }
                     }
                 }
             }
             return planten;
         }
+        public void SchrijfWijzigingen(List<Plant> planten)
+        {
+            var manager = new TuinDBManager();
+            using (var conTuin = manager.GetConnection())
+            {
+                using(var comUpdate = conTuin.CreateCommand())
+                {
+                    comUpdate.CommandType = CommandType.Text;
+                    comUpdate.CommandText = "update planten set  Kleur=@plKleur, VerkoopPrijs=@plPrijs where PlantNr=@plPlantnr";
 
+                    var parLevnr = comUpdate.CreateParameter();
+                    parLevnr.ParameterName = "plLevnr";
+                    comUpdate.Parameters.Add(parLevnr);
+
+                    var parKleur = comUpdate.CreateParameter();
+                    parKleur.ParameterName = "plKleur";
+                    comUpdate.Parameters.Add(parKleur);
+
+                    var parPrijs = comUpdate.CreateParameter();
+                    parPrijs.ParameterName = "plPrijs";
+                    comUpdate.Parameters.Add(parPrijs);
+
+                    var parPlantNr = comUpdate.CreateParameter();
+                    parPlantNr.ParameterName = "@plPlantnr";
+                    comUpdate.Parameters.Add(parPlantNr);
+
+                    conTuin.Open();
+                    foreach (var eenPlant in planten)
+                    {
+                        parLevnr.Value = eenPlant.LevNr;
+                        parPlantNr.Value = eenPlant.PlantNr;
+                        parKleur.Value = eenPlant.Kleur;
+                        parPrijs.Value = eenPlant.Prijs;
+                        comUpdate.ExecuteNonQuery();
+
+                    }
+                }
+            }
+        }
+
+        public ObservableCollection<Leverancier>  GetLeveranciers()
+        {
+            ObservableCollection<Leverancier> leveranciers = new ObservableCollection<Leverancier>();
+            var manager = new TuinDBManager();
+            using (var conTuin = manager.GetConnection())
+            {
+                using (var comOntvangen = conTuin.CreateCommand())
+                {
+                    comOntvangen.CommandType = CommandType.Text;
+                    comOntvangen.CommandText = "select * from Leveranciers";
+
+                    conTuin.Open();
+                    using (var rdrLeveranciers = comOntvangen.ExecuteReader())
+                    {
+                        Int32 levNrPos = rdrLeveranciers.GetOrdinal("LevNr");
+                        Int32 levNaamPos = rdrLeveranciers.GetOrdinal("Naam");
+                        Int32 levAdresPos = rdrLeveranciers.GetOrdinal("Adres");
+                        Int32 levPostNrPos = rdrLeveranciers.GetOrdinal("PostNr");
+                        Int32 levWoonplPos = rdrLeveranciers.GetOrdinal("Woonplaats");
+
+                        while(rdrLeveranciers.Read())
+                        {
+                            leveranciers.Add(new Leverancier(rdrLeveranciers.GetInt32(levNrPos), rdrLeveranciers.GetString(levNaamPos),
+                                rdrLeveranciers.GetString(levAdresPos), rdrLeveranciers.GetString(levPostNrPos), rdrLeveranciers.GetString(levWoonplPos)));
+                        }
+                    }
+                }
+            }
+            return leveranciers;
+        }
+        public List<String> GetPostCodes()
+        {
+            List<string> postnummers = new List<string>();
+            var manager = new TuinDBManager();
+            using(var conTuin = manager.GetConnection())
+            {
+                using(var comPostCodes = conTuin.CreateCommand())
+                {
+                    comPostCodes.CommandType = CommandType.StoredProcedure;
+                    comPostCodes.CommandText = "PostCodes";
+                    conTuin.Open();
+                    using(var rdrPostCodes = comPostCodes.ExecuteReader())
+                    {
+                        Int32 postCodePos = rdrPostCodes.GetOrdinal("PostNr");
+                        while(rdrPostCodes.Read())
+                        {
+                            postnummers.Add(rdrPostCodes.GetString(postCodePos).ToString());
+                        }
+                    }
+                }
+            }
+            return postnummers;
+        }
     }
 }

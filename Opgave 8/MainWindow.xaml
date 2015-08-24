@@ -1,11 +1,44 @@
-﻿<Window x:Class="Opgave_8.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Gemeenschap="clr-namespace:Gemeenschap;assembly=Gemeenschap"
+    xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
+    mc:Ignorable="d" x:Class="Opgave_8.MainWindow"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
+    <Window.Resources>      
+        <CollectionViewSource x:Key="plantViewSource" d:DesignSource="{d:DesignInstance {x:Type Gemeenschap:Plant}, CreateList=True}"/>
+    </Window.Resources>
     <Grid>
-        <Label Margin="0,50,200,0" Width="100" Height="25" VerticalAlignment="Top">Kies een soort:</Label>
-        <ComboBox Name="comboboxSoort"  Margin="0,50,-100,0" Width="100" Height="25" VerticalAlignment="Top" SelectionChanged="comboboxSoort_SelectionChanged"></ComboBox>
-        <ListBox Name="listboxSoort" Margin="0,100,00,10" HorizontalAlignment="Center" Width="450"></ListBox>
-        
+        <Label Margin="0,50,200,0" Width="100" Height="25" VerticalAlignment="Top" Content="Kies een soort:"/>
+        <ComboBox x:Name="comboboxSoort"  Margin="0,50,-100,0" Width="200" Height="25" VerticalAlignment="Top" SelectionChanged="comboboxSoort_SelectionChanged"/>
+        <ListBox x:Name="listboxSoort" Margin="0,100,300,10" HorizontalAlignment="Center" Width="150" />
+        <Button x:Name="btOpslaan" Margin="250,250,0,0" Width="150" Height="25" Content="Opslaan" Click="btOpslaan_Click"/>
+
+       
+        <Grid x:Name="grid2" DataContext="{Binding ElementName=listboxSoort, Path=SelectedItem}" HorizontalAlignment="Left" Margin="246,96,0,0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Kleur:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="1" VerticalAlignment="Center"/>
+            <TextBox x:Name="kleurTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="1" Text="{Binding Kleur, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+            <Label Content="Lev Nr:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="2" VerticalAlignment="Center"/>
+            <TextBox x:Name="levNrTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="2" Text="{Binding LevNr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" IsReadOnly="True"/>
+            <Label Content="Plant Nr:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="4" VerticalAlignment="Center"/>
+            <TextBox x:Name="plantNrTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="4" Text="{Binding PlantNr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" IsReadOnly="True" />
+            <Label Content="Prijs:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="5" VerticalAlignment="Center"/>
+            <TextBox x:Name="prijsTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="5" Text="{Binding Prijs, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}, StringFormat=c }" VerticalAlignment="Center" Width="120" />
+        </Grid>
+
     </Grid>
 </Window>

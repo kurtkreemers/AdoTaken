@@ -21,6 +21,8 @@ namespace Opgave_8
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<Plant> ListBoxPlantenLijst = new List<Plant>();
+       
         public MainWindow()
         {
             InitializeComponent();
@@ -40,20 +42,20 @@ namespace Opgave_8
             {
                 MessageBox.Show(ex.Message);
             }
+
+
         }
 
         private void comboboxSoort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            WijzigingenOpslaan();
+
             try
             {
-                listboxSoort.Items.Clear();
-                int soortNr = Convert.ToInt32(comboboxSoort.SelectedValue);
                 var manager = new TuinManager();
-                var allePlanten = manager.GetPlanten(soortNr);
-                foreach (var eenPlant in allePlanten)
-                {
-                    listboxSoort.Items.Add(eenPlant);
-                }
+                ListBoxPlantenLijst = manager.GetPlanten(Convert.ToInt32(comboboxSoort.SelectedValue));
+                listboxSoort.ItemsSource = ListBoxPlantenLijst;
+                listboxSoort.DisplayMemberPath = "PlantNaam";
 
             }
             catch (Exception ex)
@@ -62,6 +64,40 @@ namespace Opgave_8
             }
         }
 
+        private void btOpslaan_Click(object sender, RoutedEventArgs e)
+        {
+            WijzigingenOpslaan();
 
+        }
+
+        public void WijzigingenOpslaan()
+        {
+            List<Plant> GewijzigdePlantenLijst = new List<Plant>();
+            foreach (Plant pl in ListBoxPlantenLijst)
+            {
+                if (pl.Changed == true)
+                {
+                    GewijzigdePlantenLijst.Add(pl);
+                    pl.Changed = false;
+                }
+            }
+            if ((GewijzigdePlantenLijst.Count() != 0) && (MessageBox.Show("Gewijzigde planten van soort \"" + ((Soort)comboboxSoort.SelectedItem).SoortNaam + "\" opslaan?", "Opslaan", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes))
+            {
+                var manager = new TuinManager();
+                try
+                {
+                    manager.SchrijfWijzigingen(GewijzigdePlantenLijst);
+                    MessageBox.Show("Planten opgeslagen", "Opslaan", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("Er is een fout opgetreden: " + ex.Message, "Opslaan", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+            }
+
+            GewijzigdePlantenLijst.Clear();
+        }
     }
 }

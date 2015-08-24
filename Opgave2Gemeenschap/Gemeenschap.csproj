@@ -42,11 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Leverancier.cs" />
+    <Compile Include="Plant.cs" />
     <Compile Include="PlantenInfo.cs" />
     <Compile Include="Soort.cs" />
     <Compile Include="TuinDBManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TuinManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
