@@ -100,17 +100,7 @@ e)
                     else if (NieuweLeveranciers.Count() != 0)
                         manager.SchrijfToevoegingen(NieuweLeveranciers);
                     else if (GewijzigdeLeveranciers.Count() != 0)
-
-                        try
-                        {
-                            manager.SchrijfWijzigingen(GewijzigdeLeveranciers);
-                        }
-                        catch (Exception ex)
-                        {
-
-                            MessageBox.Show(ex.Message);
-                        }
-                        
+                        manager.SchrijfWijzigingen(GewijzigdeLeveranciers);
                 }
             }
             OudeLeveranciers.Clear();

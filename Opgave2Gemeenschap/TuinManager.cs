@@ -327,11 +327,13 @@ namespace Gemeenschap
                         Int32 levAdresPos = rdrLeveranciers.GetOrdinal("Adres");
                         Int32 levPostNrPos = rdrLeveranciers.GetOrdinal("PostNr");
                         Int32 levWoonplPos = rdrLeveranciers.GetOrdinal("Woonplaats");
+                        Int32 levVersiePos = rdrLeveranciers.GetOrdinal("Versie");
 
                         while(rdrLeveranciers.Read())
                         {
                             leveranciers.Add(new Leverancier(rdrLeveranciers.GetInt32(levNrPos), rdrLeveranciers.GetString(levNaamPos),
-                                rdrLeveranciers.GetString(levAdresPos), rdrLeveranciers.GetString(levPostNrPos), rdrLeveranciers.GetString(levWoonplPos)));
+                                rdrLeveranciers.GetString(levAdresPos), rdrLeveranciers.GetString(levPostNrPos), rdrLeveranciers.GetString(levWoonplPos),
+                                rdrLeveranciers.GetValue(levVersiePos)));
                         }
                     }
                 }
@@ -430,7 +432,7 @@ namespace Gemeenschap
                 using(var comUpdate = conTuin.CreateCommand())
                 {
                     comUpdate.CommandType = CommandType.Text;
-                    comUpdate.CommandText = "update leveranciers set Naam=@naam,Adres=@adres, PostNr=@postnr,Woonplaats=@woonpl  where LevNr=@levnr";
+                    comUpdate.CommandText = "update leveranciers set Naam=@naam,Adres=@adres, PostNr=@postnr,Woonplaats=@woonpl  where LevNr=@levnr and Versie=@versie";
 
                     var parNaam = comUpdate.CreateParameter();
                     parNaam.ParameterName = "@naam";
@@ -452,6 +454,10 @@ namespace Gemeenschap
                     parLevNr.ParameterName = "@levnr";
                     comUpdate.Parameters.Add(parLevNr);
 
+                    var parVersie = comUpdate.CreateParameter();
+                    parVersie.ParameterName = "@versie";
+                    comUpdate.Parameters.Add(parVersie);
+
                     conTuin.Open();
 
                     foreach (var eenleverancier in leveranciers)
@@ -461,7 +467,9 @@ namespace Gemeenschap
                         parPostNr.Value = eenleverancier.PostNr;
                         parWoonpl.Value = eenleverancier.Woonplaats;
                         parLevNr.Value = eenleverancier.LevNr;
-                        comUpdate.ExecuteNonQuery();
+                        parVersie.Value = eenleverancier.Versie;
+                        if (comUpdate.ExecuteNonQuery() == 0)
+                            throw new Exception("Iemand was je voor");
                     }
                 }
             }

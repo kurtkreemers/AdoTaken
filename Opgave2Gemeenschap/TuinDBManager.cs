@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 namespace Gemeenschap
 {
     public class TuinDBManager
-    {
-        
+    {        
             private static ConnectionStringSettings conTuinSetting = ConfigurationManager.ConnectionStrings["Tuin"];
             private static DbProviderFactory factory = DbProviderFactories.GetFactory(conTuinSetting.ProviderName);
 

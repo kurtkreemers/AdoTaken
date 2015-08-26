@@ -13,6 +13,7 @@ namespace Gemeenschap
         private String AdresValue;
         private String PostNrValue;
         private String WoonplaatsValue;
+        private System.Object versieValue;
 
         public bool Changed { get; set; }
         public int LevNr
@@ -66,13 +67,20 @@ namespace Gemeenschap
             }
         }
 
-        public Leverancier( Int32 levnr, String naam, String adres, String postnr, String woonpl)
+        public Object Versie
+        {
+            get { return versieValue; }
+            set { versieValue = value; }
+        }
+
+        public Leverancier( Int32 levnr, String naam, String adres, String postnr, String woonpl, Object versie)
         {
             this.LevNr = levnr;
             this.Naam = naam;
             this.Adres = adres;
             this.PostNr = postnr;
             this.Woonplaats = woonpl;
+            this.Versie = versie;
             this.Changed = false;
         }
 
