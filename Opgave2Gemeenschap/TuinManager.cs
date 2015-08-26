@@ -308,7 +308,7 @@ namespace Gemeenschap
             }
         }
 
-        public ObservableCollection<Leverancier>  GetLeveranciers()
+        public ObservableCollection<Leverancier> GetLeveranciers()
         {
             ObservableCollection<Leverancier> leveranciers = new ObservableCollection<Leverancier>();
             var manager = new TuinDBManager();
@@ -360,6 +360,111 @@ namespace Gemeenschap
                 }
             }
             return postnummers;
+        }
+        public void SchrijfVerwijderingen(List<Leverancier> leveranciers)
+        {
+            var manager = new TuinDBManager();
+            using(var conTuin = manager.GetConnection())
+            {
+                using(var comDelete = conTuin.CreateCommand())
+                {
+                    comDelete.CommandType = CommandType.Text;
+                    comDelete.CommandText = "delete from leveranciers where LevNr=@levNr";
+                    var parLevNr = comDelete.CreateParameter();
+                    parLevNr.ParameterName = "@levNr";
+                    comDelete.Parameters.Add(parLevNr);
+                    conTuin.Open();
+                    foreach (Leverancier eenLeverancier in leveranciers)
+                    {
+                        parLevNr.Value = eenLeverancier.LevNr;
+                        comDelete.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+        public void SchrijfToevoegingen(List<Leverancier> leveranciers)
+        {
+            var manager = new TuinDBManager();
+            using(var conTuin = manager.GetConnection())
+            {
+                using(var comInsert = conTuin.CreateCommand())
+                {
+                    comInsert.CommandType = CommandType.Text;
+                    comInsert.CommandText = "Insert into leveranciers(Naam,Adres,PostNr,Woonplaats) values (@naam,@adres,@postnr,@woonpl)";
+
+                    var parNaam = comInsert.CreateParameter();
+                    parNaam.ParameterName = "@naam";
+                    comInsert.Parameters.Add(parNaam);
+
+                    var parAdres = comInsert.CreateParameter();
+                    parAdres.ParameterName = "@adres";
+                    comInsert.Parameters.Add(parAdres);
+
+                    var parPostNr = comInsert.CreateParameter();
+                    parPostNr.ParameterName = "@postnr";
+                    comInsert.Parameters.Add(parPostNr);
+
+                    var parWoonpl = comInsert.CreateParameter();
+                    parWoonpl.ParameterName = "@woonpl";
+                    comInsert.Parameters.Add(parWoonpl);
+
+                    conTuin.Open();
+
+                    foreach (Leverancier eenLeverancier in leveranciers)
+                    {
+                        parNaam.Value = eenLeverancier.Naam;
+                        parAdres.Value = eenLeverancier.Adres;
+                        parPostNr.Value = eenLeverancier.PostNr;
+                        parWoonpl.Value = eenLeverancier.Woonplaats;
+                        comInsert.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        public void SchrijfWijzigingen(List<Leverancier> leveranciers)
+        {
+            var manager = new TuinDBManager();
+            using(var conTuin = manager.GetConnection())
+            {
+                using(var comUpdate = conTuin.CreateCommand())
+                {
+                    comUpdate.CommandType = CommandType.Text;
+                    comUpdate.CommandText = "update leveranciers set Naam=@naam,Adres=@adres, PostNr=@postnr,Woonplaats=@woonpl  where LevNr=@levnr";
+
+                    var parNaam = comUpdate.CreateParameter();
+                    parNaam.ParameterName = "@naam";
+                    comUpdate.Parameters.Add(parNaam);
+
+                    var parAdres = comUpdate.CreateParameter();
+                    parAdres.ParameterName = "@adres";
+                    comUpdate.Parameters.Add(parAdres);
+
+                    var parPostNr = comUpdate.CreateParameter();
+                    parPostNr.ParameterName = "@postnr";
+                    comUpdate.Parameters.Add(parPostNr);
+
+                    var parWoonpl = comUpdate.CreateParameter();
+                    parWoonpl.ParameterName = "@woonpl";
+                    comUpdate.Parameters.Add(parWoonpl);
+
+                    var parLevNr = comUpdate.CreateParameter();
+                    parLevNr.ParameterName = "@levnr";
+                    comUpdate.Parameters.Add(parLevNr);
+
+                    conTuin.Open();
+
+                    foreach (var eenleverancier in leveranciers)
+                    {
+                        parNaam.Value = eenleverancier.Naam;
+                        parAdres.Value = eenleverancier.Adres;
+                        parPostNr.Value = eenleverancier.PostNr;
+                        parWoonpl.Value = eenleverancier.Woonplaats;
+                        parLevNr.Value = eenleverancier.LevNr;
+                        comUpdate.ExecuteNonQuery();
+                    }
+                }
+            }
         }
     }
 }

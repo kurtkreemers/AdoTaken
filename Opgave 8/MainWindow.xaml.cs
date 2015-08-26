@@ -46,6 +46,8 @@ namespace Opgave_8
 
         }
 
+        Soort geselecteerdeSoort;
+
         private void comboboxSoort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             WijzigingenOpslaan();
@@ -56,6 +58,8 @@ namespace Opgave_8
                 ListBoxPlantenLijst = manager.GetPlanten(Convert.ToInt32(comboboxSoort.SelectedValue));
                 listboxSoort.ItemsSource = ListBoxPlantenLijst;
                 listboxSoort.DisplayMemberPath = "PlantNaam";
+
+                geselecteerdeSoort = comboboxSoort.SelectedItem as Soort;
 
             }
             catch (Exception ex)
@@ -70,8 +74,12 @@ namespace Opgave_8
 
         }
 
+
+       
+
         public void WijzigingenOpslaan()
         {
+           
             List<Plant> GewijzigdePlantenLijst = new List<Plant>();
             foreach (Plant pl in ListBoxPlantenLijst)
             {
@@ -81,7 +89,7 @@ namespace Opgave_8
                     pl.Changed = false;
                 }
             }
-            if ((GewijzigdePlantenLijst.Count() != 0) && (MessageBox.Show("Gewijzigde planten van soort \"" + ((Soort)comboboxSoort.SelectedItem).SoortNaam + "\" opslaan?", "Opslaan", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes))
+            if ((GewijzigdePlantenLijst.Count() != 0) && (MessageBox.Show("Gewijzigde planten van soort \"" + geselecteerdeSoort.SoortNaam + "\" opslaan?", "Opslaan", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes))
             {
                 var manager = new TuinManager();
                 try

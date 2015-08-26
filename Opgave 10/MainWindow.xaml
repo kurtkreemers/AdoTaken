@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Gemeenschap="clr-namespace:Gemeenschap;assembly=Gemeenschap" mc:Ignorable="d" x:Class="Opgave_10.MainWindow"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded"
-    SizeToContent="Width">
+    SizeToContent="Width" Closing="Window_Closing" >
     <Window.Resources>
         <CollectionViewSource x:Key="leverancierViewSource" d:DesignSource="{d:DesignInstance {x:Type Gemeenschap:Leverancier}, CreateList=True}"/>
     </Window.Resources>
@@ -13,11 +13,10 @@
             <ComboBox x:Name="cbPostcode" Height="25" Width="91" SelectionChanged="cbPostcode_SelectionChanged"/>
         </StackPanel>
         
-        <Grid DataContext="{StaticResource leverancierViewSource}">
-
-            <DataGrid x:Name="leverancierDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False">
+        <Grid >
+            <DataGrid x:Name="leverancierDataGrid" DataContext="{StaticResource leverancierViewSource}" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="levNrColumn" Width="Auto" Header="Lev Nr" Binding="{Binding LevNr}"/>
+                    <DataGridTextColumn x:Name="levNrColumn" Width="Auto" Header="Lev Nr" Binding="{Binding LevNr}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="naamColumn" Width="Auto" Header="Naam" Binding="{Binding Naam}"/>
                     <DataGridTextColumn x:Name="adresColumn" Width="Auto" Header="Adres" Binding="{Binding Adres}"/>
 

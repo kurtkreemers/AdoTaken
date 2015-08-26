@@ -26,6 +26,8 @@ namespace Opgave_10
         CollectionViewSource leverancierViewSource = new CollectionViewSource();
         public ObservableCollection<Leverancier> levOb = new ObservableCollection<Leverancier>();
         public List<Leverancier> OudeLeveranciers = new List<Leverancier>();
+        public List<Leverancier> NieuweLeveranciers = new List<Leverancier>();
+        public List<Leverancier> GewijzigdeLeveranciers = new List<Leverancier>();
         public MainWindow()
         {
             InitializeComponent();
@@ -71,6 +73,40 @@ e)
                     OudeLeveranciers.Add(oudeLeverancier);
                 }
             }
+            if(e.NewItems != null)
+            {
+                foreach (Leverancier nieweLeverancier in e.NewItems)
+                {
+                    NieuweLeveranciers.Add(nieweLeverancier);
+                }
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var manager = new TuinManager();
+            foreach (Leverancier lev in levOb)
+            {
+                if (lev.Changed == true)
+                    GewijzigdeLeveranciers.Add(lev);
+                lev.Changed = false;
+            }
+            if (OudeLeveranciers.Count() != 0 || NieuweLeveranciers.Count() != 0 || GewijzigdeLeveranciers.Count() != 0)
+            {
+                if (MessageBox.Show("Wilt u alles wegschrijven naar de database ?", "Opslaan", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    if (OudeLeveranciers.Count() != 0)
+                        manager.SchrijfVerwijderingen(OudeLeveranciers);
+                    else if (NieuweLeveranciers.Count() != 0)
+                        manager.SchrijfToevoegingen(NieuweLeveranciers);
+                    else if (GewijzigdeLeveranciers.Count() != 0)
+                        manager.SchrijfWijzigingen(GewijzigdeLeveranciers);
+                }
+            }
+            OudeLeveranciers.Clear();
+            NieuweLeveranciers.Clear();
+            GewijzigdeLeveranciers.Clear();
+           
         }
 
     }     

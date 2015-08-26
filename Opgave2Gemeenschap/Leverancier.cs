@@ -13,40 +13,57 @@ namespace Gemeenschap
         private String AdresValue;
         private String PostNrValue;
         private String WoonplaatsValue;
+
+        public bool Changed { get; set; }
         public int LevNr
         {
             get
             { return LevNrValue; }
             set
-            { LevNrValue = value; }
+            { 
+                LevNrValue = value;
+                
+            }
         }
         public String Naam
         {
             get
             { return NaamValue; }
             set
-            { NaamValue = value; }
+            { 
+                NaamValue = value;
+                Changed = true;
+            }
         }
         public String Adres
         {
             get
             { return AdresValue; }
             set
-            { AdresValue = value; }
+            { 
+                AdresValue = value;
+                Changed = true;
+            }
         }
         public String PostNr
         {
             get
             { return PostNrValue; }
             set
-            { PostNrValue = value; }
+            {
+                PostNrValue = value;
+                Changed = true;
+            }
         }
         public String Woonplaats
         {
             get
             { return WoonplaatsValue; }
             set
-            { WoonplaatsValue = value; }
+            { 
+                WoonplaatsValue = value;
+                Changed = true;
+            }
         }
 
         public Leverancier( Int32 levnr, String naam, String adres, String postnr, String woonpl)
@@ -56,6 +73,12 @@ namespace Gemeenschap
             this.Adres = adres;
             this.PostNr = postnr;
             this.Woonplaats = woonpl;
+            this.Changed = false;
+        }
+
+        public Leverancier()
+        {
+
         }
     }
 }
